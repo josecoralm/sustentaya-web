@@ -1237,6 +1237,9 @@
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
       }
+
+      // Limpiar inmediatamente todos los datos del formulario tras el envío exitoso
+      resetearFormulariosSOS();
     }
 
     function cerrarModalSOS() {
@@ -1249,33 +1252,50 @@
     }
 
     function resetearFormulariosSOS() {
-      // 1. Reset forms
+      // 1. Reset forms nativos
       const f1 = document.getElementById('form-sos');
       if (f1) f1.reset();
       const f2 = document.getElementById('form-sos-modal');
       if (f2) f2.reset();
 
-      // 2. Limpiar inputs explícitamente
+      // 2. Limpiar inputs y textareas explícitamente
       ['input-nombre', 'input-email', 'input-telefono', 'input-universidad', 'input-otro-caso'].forEach(function(id) {
         const el = document.getElementById(id);
-        if (el) el.value = '';
+        if (el) {
+          el.value = '';
+          el.setCustomValidity('');
+        }
       });
       ['modal-nombre', 'modal-email', 'modal-telefono', 'modal-universidad', 'modal-input-otro-caso'].forEach(function(id) {
         const el = document.getElementById(id);
-        if (el) el.value = '';
+        if (el) {
+          el.value = '';
+          el.setCustomValidity('');
+        }
       });
 
-      // 3. Reset dropzones de archivos
+      // 3. Resetear selects a la opción inicial
+      ['select-urgencia', 'select-modalidad', 'select-grado', 'modal-select-urgencia', 'modal-select-modalidad', 'modal-select-grado'].forEach(function(id) {
+        const sel = document.getElementById(id);
+        if (sel) sel.selectedIndex = 0;
+      });
+
+      // 4. Reset dropzones de archivos
       if (typeof quitarArchivo === 'function') quitarArchivo();
       if (typeof quitarArchivoModal === 'function') quitarArchivoModal();
 
-      // 4. Ocultar campos de 'otro caso'
+      // 5. Ocultar y desmarcar required de campos 'otro caso'
       const campoOtro = document.getElementById('campo-otro-caso');
+      const inputOtro = document.getElementById('input-otro-caso');
       if (campoOtro) campoOtro.classList.add('hidden');
-      const modalCampoOtro = document.getElementById('modal-campo-otro-caso');
-      if (modalCampoOtro) modalCampoOtro.classList.add('hidden');
+      if (inputOtro) inputOtro.required = false;
 
-      // 5. Ocultar mensajes de éxito inline
+      const modalCampoOtro = document.getElementById('modal-campo-otro-caso');
+      const modalInputOtro = document.getElementById('modal-input-otro-caso');
+      if (modalCampoOtro) modalCampoOtro.classList.add('hidden');
+      if (modalInputOtro) modalInputOtro.required = false;
+
+      // 6. Ocultar mensajes inline
       const msgExito = document.getElementById('msg-sos-exito');
       if (msgExito) msgExito.classList.add('hidden');
     }
@@ -1498,6 +1518,9 @@
         modalConfirmacion.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
       }
+
+      // Limpiar inmediatamente todos los datos del formulario tras el envío exitoso
+      resetearFormulariosSOS();
     }
 
     // Cerrar modales con tecla Escape
@@ -1959,16 +1982,13 @@
         </div>
       </div>
 
-      <div class="mt-5 space-y-2">
-        <a href="https://sustentaya.com/agendar" target="_blank" onclick="cerrarModalSOS()" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs py-3 px-4 rounded-xl transition shadow-md flex items-center justify-center gap-2">
+      <div class="mt-5 space-y-2.5">
+        <a href="https://sustentaya.com/agendar" target="_blank" onclick="cerrarModalSOS()" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm py-3.5 px-4 rounded-xl transition shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer">
           <span>🗓️ Agendar mi Sesión Técnica (30 min)</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="#contacto-directo" onclick="cerrarModalSOS()" class="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 px-4 rounded-xl transition">
-          💬 ¿Urgencia Extrema? Escribir a Coordinación Directa
-        </a>
-        <button type="button" onclick="cerrarModalSOS()" class="block w-full text-slate-500 hover:text-slate-800 font-semibold text-xs py-1.5 transition">
-          Cerrar esta ventana
+        <button type="button" onclick="cerrarModalSOS()" class="block w-full text-slate-400 hover:text-slate-700 font-bold text-xs py-2 transition cursor-pointer">
+          Cerrar ventana
         </button>
       </div>
     </div>
