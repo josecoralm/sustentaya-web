@@ -9,14 +9,26 @@
   })(window,document,'script','dataLayer','GTM-M46GS697');</script>
   <!-- End Google Tag Manager -->
 
-  <!-- Google tag (gtag.js) GA4 -->
+  <!-- Google tag (gtag.js) GA4 - SustentaYa Tracking Fix -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4HF4DWXZS"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-H4HF4DWXZS');
+    var currentDomainUrl = 'https://sustentaya.com/';
+    try {
+      if (window.top !== window.self && document.referrer) {
+        currentDomainUrl = document.referrer;
+      }
+    } catch(err) {}
+
+    gtag('config', 'G-H4HF4DWXZS', {
+      'page_location': currentDomainUrl,
+      'page_path': '/',
+      'page_title': 'Asesoría de Tesis y TSP en Perú | SustentaYa',
+      'cookie_flags': 'SameSite=None;Secure'
+    });
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
